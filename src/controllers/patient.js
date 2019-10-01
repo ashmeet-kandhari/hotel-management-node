@@ -2,89 +2,82 @@ import {
   getPatientById,
   checkIfPatientIsRegistered,
   addPatientDetails,
-} from '../services/patient';
+  updatePatientDetails
+} from '../services/patient'
 
-export async function getPatient(req, res) {
+export async function getPatient (req, res) {
   try {
-    const createdata = await getPatientById(req.params.mid);
+    const createdata = await getPatientById(req.params.mid)
     if (createdata) {
-      res.json({
-        success: true,
-        data: createdata,
-      });
+      return res.json({
+        data: createdata
+      })
     } else {
       return res.status(404).json({
-        success: false,
-        message: 'Patient Not found',
-      });
+        message: 'Patient Details Not found'
+      })
     }
   } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: 'Something went wrong!',
-    });
+    console.log(err)
+    return res.status(500).json({
+      message: 'Something went wrong!'
+    })
   }
 }
 
-export async function registerPatient(req, res) {
+export async function registerPatient (req, res) {
   try {
     const checkdata = await checkIfPatientIsRegistered(
-        req.body.fullname,
-        req.body.mobile
-    );
+      req.body.fullname,
+      req.body.mobile
+    )
     if (checkdata) {
-      res.json({
+      return res.status(409).json({
         message: 'Already Exist',
-        data: checkdata,
-      });
+        data: checkdata
+      })
     } else {
       const createdata = await addPatientDetails(req.body, [
         'fullname',
         'email',
         'age',
-        'mobile',
-      ]);
+        'mobile'
+      ])
       if (createdata) {
-        res.json({
-          success: true,
+        return res.status(201).json({
           message: 'Patient Registered Successfully',
-          data: createdata,
-        });
+          data: createdata
+        })
       }
     }
   } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: 'Something went wrong!',
-    });
+    console.log(err)
+    return res.status(500).json({
+      message: 'Something went wrong!'
+    })
   }
 }
 
-export async function updatePatient(req, res) {
+export async function updatePatient (req, res) {
   const update = await updatePatientDetails(req.body, req.params.mid)
-      .then((response) => {
-        if (response[0] === 0) {
-          return res.status(404).json({
-            success: false,
-            message: 'Patient Not found',
-          });
-        }
-        return res.json({
-          success: true,
-          message: 'Patient Details Updated Successfully',
-          data: response[1],
-        });
+    .then(response => {
+      if (response[0] === 0) {
+        return res.status(404).json({
+          message: 'Patient Not found'
+        })
+      }
+      return res.json({
+        message: 'Patient Details Updated Successfully',
+        data: response[1]
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({
-          success: false,
-          message: 'Something went wrong!',
-          error: err,
-        });
-      });
+    })
+    .catch(err => {
+      console.log(err)
+      return res.status(500).json({
+        message: 'Something went wrong!',
+        error: err
+      })
+    })
   // console.log(update);
-  return update;
+  return update
 }

@@ -1,5 +1,5 @@
-import User from '../models/user';
+import User from '../models/user'
 
-export const addUser = (user) => User.create(user);
+export const addUser = user => User.create(user)
 
-export const getUserByUserName = (username) => User.findByPk(username);
+export const getUserByUserName = username => User.findByPk(username)

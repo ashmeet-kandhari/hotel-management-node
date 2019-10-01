@@ -1,35 +1,26 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import {set} from './routes/index';
+import express from 'express'
+import bodyParser from 'body-parser'
 
-// Importing Routes
-// import NurseRoutes from './routes/nurse';
-// import DoctorRoutes from './routes/doctor';
-// import PharmacistRoutes from './routes/pharmacist';
+import ApiV1Routes from './routes/apiV1'
 
-const app = express();
+const app = express()
 
 // middlewares
-app.all('*', function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'POST, PUT, OPTIONS, DELETE, GET');
-  res.header('Access-Control-Max-Age', '3600');
+app.all('*', function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'POST, PUT, OPTIONS, DELETE, GET')
+  res.header('Access-Control-Max-Age', '3600')
   res.header(
-      'Access-Control-Allow-Headers',
-      'Content-Type, Access-Control-Allow-Headers, ' +
+    'Access-Control-Allow-Headers',
+    'Content-Type, Access-Control-Allow-Headers, ' +
       'Authorization, X-Requested-With, x-access-token'
-  );
-  next();
-});
+  )
+  next()
+})
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-set(app);
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
-// routes
-// app.use('/', login);
-// app.use('/api/nurse', NurseRoutes);
-// app.use('/api/doctor', DoctorRoutes);
-// app.use('/api/pharmacist', PharmacistRoutes);
+app.use('/api/v1', ApiV1Routes)
 
-export default app;
+export default app

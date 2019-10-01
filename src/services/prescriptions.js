@@ -1,22 +1,26 @@
-import Prescriptions from '../models/prescriptions';
+import { Op } from 'sequelize'
+import Prescriptions from '../models/prescriptions'
 
-export const createPrescription = (params) =>
-  Prescriptions.create(params, {fields: ['mid', 'prescription']});
+export const createPrescription = params =>
+  Prescriptions.create(params, { fields: ['mid', 'prescription'] })
 
-export const getPrescriptionByMid = (mid) =>
-  Prescriptions.findOne({
-    where: {mid: parseInt(mid)},
-    order: [['createdat', 'DESC']],
-  });
+export const getPrescriptionById = id => Prescriptions.findByPk(id)
 
-export const checkIfPrescriptionIsDigitized = (prescription) =>
+export const getPrescriptionByMid = mid =>
+  Prescriptions.findAll({
+    where: { mid: parseInt(mid) },
+    order: [['createdat', 'DESC']]
+  })
+
+export const checkIfPrescriptionIsDigitized = params =>
   Prescriptions.findOne({
     where: {
-      prescription: {[Op.eq]: prescription},
+      mid: params.mid,
+      prescription: { [Op.eq]: params.prescription },
       prescription_approved: false,
-      delivered: false,
-    },
-  });
+      delivered: false
+    }
+  })
 
-export const updatePrescription = (json, mid) =>
-  Prescriptions.update(json, {returning: true, where: {mid: mid}});
+export const updatePrescription = (json, id) =>
+  Prescriptions.update(json, { returning: true, where: { id: id } })

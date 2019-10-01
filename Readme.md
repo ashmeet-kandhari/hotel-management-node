@@ -1,3 +1,19 @@
+
+
+This is a basic hotel management system implemented in postgres. 
+Below are a few commands to setup the db.
+You will have to replace the secretKey in configFile fot proper encryption of jwt token.
+To start the app in dev mode use
+   * npm run dev
+
+To run in prod mode use
+   * npm run build
+   * npm start
+
+Default port is 7557
+
+
+
 docker exec -it hospitalmanagementsystem_db_1 psql -U postgres
 
 \l
@@ -15,8 +31,9 @@ CREATE TABLE patient(
 );
 
 CREATE TABLE prescriptions(
+   id serial PRIMARY KEY,
    mid INTEGER REFERENCES patient(mid),
-   createdAt TIMESTAMP PRIMARY KEY,
+   createdAt TIMESTAMP,
    updatedAt TIMESTAMP,
    prescription TEXT[],
    prescription_approved BOOLEAN DEFAULT false,
@@ -29,16 +46,6 @@ CREATE TABLE roles(
    role VARCHAR (50) NOT NULL
 );
 
-
-CREATE TABLE employee(
-   id serial PRIMARY KEY,
-   fullname VARCHAR (100) NOT NULL,
-   age INT NOT NULL, 
-   mobile BIGINT CHECK (mobile >= 0000000000 AND mobile <= 9999999999),
-   email VARCHAR (200),
-   role INT REFERENCES roles(id)
-);
-
 CREATE TABLE users (
    username TEXT PRIMARY KEY,
    password TEXT NOT NULL,
@@ -48,9 +55,4 @@ CREATE TABLE users (
    email VARCHAR (200),
    role TEXT NOT NULL
 );
-
-INSERT INTO roles(role) VALUES ('nurse'), ('doctor'), ('pharmacist'), ('admin');
-
-
-INSERT INTO employee(fullname, age, mobile, email, role) VALUES ('Mary Kom', 24, 1234567890, 'mary@h.com', 1), ('Madhukar hello', 34, 2345678901, 'madhukar@h.com', 2), ('Abc', 44, 3456789012, 'abc@h.com', 3), ('Admin', 44, 3456789012, 'abc@h.com', 4);
 
