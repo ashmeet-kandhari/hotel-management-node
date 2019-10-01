@@ -1,22 +1,15 @@
-import Sequelize from 'sequelize';
+import Sequelize from 'sequelize'
+import config from '../config'
 
-export const db = new Sequelize(
-    'postgres://ashmeet:password@localhost:5432/hotel_management',
-    {
-      dialect: 'postgres',
-      pool: {
-        max: 1,
-        min: 0,
-        idle: 10000,
-      },
-      logging: false,
-    }
-);
+export const db = new Sequelize(config.dbConnectionString, {
+  dialect: config.dialect,
+  logging: false
+})
 
 db.authenticate()
-    .then(() => {
-      console.log('Connection has been established successfully.');
-    })
-    .catch((err) => {
-      console.error('Unable to connect to the database:', err);
-    });
+  .then(() => {
+    console.log('Connection has been established successfully.')
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err)
+  })

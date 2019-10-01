@@ -1,5 +1,18 @@
-export const port = 3000;
-export const dbConnectionString = 'your postgresql connection';
-export const saltRounds = 2;
-export const jwtSecret = 'yo-its-a-secret';
-export const tokenExpireTime = '6h';
+const port = 7557
+const dbConnectionString =
+  'postgres://username:password@localhost:5432/hotel_management'
+const dialect = 'postgres'
+const saltRounds = 2
+const jwtSecret = 'yo-its-a-secret'
+const tokenExpireTime = '6h'
+
+const config = {
+  port,
+  dbConnectionString,
+  dialect,
+  saltRounds,
+  jwtSecret,
+  tokenExpireTime
+}
+
+export default config
