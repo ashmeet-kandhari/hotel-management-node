@@ -1,0 +1,148 @@
+openapi: 3.0.1
+info:
+  title: Hospital Management
+  description: This is a basic Hospital Management Service
+  version: 1.0.0
+servers:
+- url: https://petstore.swagger.io/v2
+- url: http://petstore.swagger.io/v2
+security:
+- bearerAuth: []
+tags:
+- name: nurse
+  description: Registers patients and enters prescription.
+- name: doctor
+  description: Writes and approves prescriptions for patients.
+- name: pharmacist
+  description: Gives medicines to patients.
+- name: admin
+  description: Can add/remove employees ie doctors, nurse, pharmacists and can see
+    the reports.
+paths:
+  /patient:
+    post:
+      tags:
+      - nurse
+      summary: Registers a new patient in the hospital.
+      operationId: registerPatient
+      requestBody:
+        description: Patient Details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+        required: true
+      responses:
+        201:
+          description: Created Successfully!
+          content: {}
+        405:
+          description: Invalid input
+          content: {}
+      x-swagger-router-controller: Nurse
+  /patient/{mId}:
+    get:
+      tags:
+      - nurse
+      - doctor
+      - pharmacist
+      summary: Find patient by ID
+      description: Returns a single patient
+      operationId: getPatientById
+      parameters:
+      - name: mId
+        in: path
+        description: ID of patient to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Patient not found
+          content: {}
+      x-swagger-router-controller: Nurse
+    put:
+      tags:
+      - nurse
+      - doctor
+      - pharmacist
+      summary: Updates patient details of the hospital.
+      operationId: updatePatientDetails
+      parameters:
+      - name: mId
+        in: path
+        description: Patient id to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Patient object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+        required: true
+      responses:
+        400:
+          description: Invalid ID supplied
+          content: {}
+        404:
+          description: Pet not found
+          content: {}
+        405:
+          description: Validation exception
+          content: {}
+      x-swagger-router-controller: Nurse
+components:
+  schemas:
+    Patient:
+      type: object
+      properties:
+        mid:
+          type: integer
+          format: int64
+        fullname:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        mobile:
+          type: string
+        prescription:
+          type: array
+          items:
+            type: string
+        prescription_approved:
+          type: boolean
+          default: false
+      example:
+        prescription_approved: false
+        prescription:
+        - prescription
+        - prescription
+        mobile: mobile
+        mid: 0
+        fullname: fullname
+        email: email
+        age: 6
+  securitySchemes:
+    hospital_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
